@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: TablePress Extension: Chartist
-Plugin URI: http://soderlind.no
-Description: Extension for TablePress to filter table rows by using additional Shortcode parameters
-Version: 1.0
+Plugin URI: https://github.com/soderlind/tablepress_chartist
+Description: Extension for TablePress to create a chart based on the data in your TablePress table.
+Version: 0.1
 Author: Per Soderlind
 Author URI: http://soderlind.no
 */
