@@ -102,7 +102,6 @@ class TablePress_Chartist{
 		$default_atts['chartist'] = '';
 		$default_atts['chartist_table_hide'] = false;
 		$default_atts['chartist_aspect_ratio'] = '3:4';
-		$default_atts['filter_columns'] = 'all';
 		return $default_atts;
 	}
 
@@ -118,7 +117,6 @@ class TablePress_Chartist{
 	 */
 	public static function save_chart_data( $table, $orig_table, $render_options ) {
 
-		printf("<pre><code>%s</code></pre>",print_r($render_options,true));
 		if ( ! empty( $render_options['chartist'] ) &&  true ===  $render_options['chartist'] ) {
 
 			if(!get_transient(self::$cache_prefix . $table['id'])) {
