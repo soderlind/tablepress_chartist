@@ -9,7 +9,7 @@ Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this [TablePress](h
 
 ##Usage
 
-Add `chartist=true` parameter to your TablePress shortcode, eg: `[table id=1 chartist=true /]`
+Add the `chartist=true` parameter to your TablePress shortcode, eg: `[table id=1 chartist=true /]`
 
 **Optional parameters**
 
