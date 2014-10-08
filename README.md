@@ -16,6 +16,8 @@ Add `chartist=true` parameter to your TablePress shortcode, eg: `[table id=1 cha
 * Hide the table, `chartist_table_hide=true` eg: `[table id=1 chartist=true chartist_table_hide=true/]`
 * More parameters to come
 
+In TablePress, if table head is set, the extention will use the row as chart labels.
+
 ##Installation
 
 **Prerequisite:** The [TablePress](https://tablepress.org/) plugin
