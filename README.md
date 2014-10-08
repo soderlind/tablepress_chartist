@@ -1,8 +1,35 @@
 #TablePress Extension: Chartist
 
+![Sample chart](tablepress_chartist.png)
+
 ##About
 
+The [Chartist.js](http://gionkunz.github.io/chartist-js/) extension for [TablePress](https://tablepress.org/) creates a chart based on the data in your TablePress table.
+
+##Usage
+
+Add `chartist=true` parameter to your TablePress shortcode, eg: `[table id=1 chartist=true /]`
+
+**Optional parameters**
+
+* Hide the table, `chartist_table_hide=true` eg: `[table id=1 chartist=true chartist_table_hide=true/]`
+* More parameters to come
+
 ##Installation
+
+**Prerequisite:** The [TablePress](https://tablepress.org/) plugin
+
+* Copy the 'tablepress_chartist' folder into your plugins folder
+* Activate the plugin via the Plugins admin page
+
+##Credits
+
+* Gion Kunz for creating [Chartist.js](http://gionkunz.github.io/chartist-js/)
+* Tobias Bäthge for creating [TablePress](https://tablepress.org/)
+
+##Changelog
+
+* 0.1 Initial release (i.e. a early beta)
 
 ##Copyright and License
 

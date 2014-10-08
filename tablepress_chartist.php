@@ -100,7 +100,7 @@ class TablePress_Chartist{
 	 */
 	public static function shortcode_attributes( $default_atts ) {
 		$default_atts['chartist'] = '';
-		$default_atts['chartist_table_display'] = true;
+		$default_atts['chartist_table_hide'] = false;
 		$default_atts['chartist_aspect_ratio'] = '3:4';
 		$default_atts['filter_columns'] = 'all';
 		return $default_atts;
@@ -118,25 +118,29 @@ class TablePress_Chartist{
 	 */
 	public static function save_chart_data( $table, $orig_table, $render_options ) {
 
-		if(!get_transient(self::$cache_prefix . $table['id'])) {
-			$data = $table['data'];
-			$options = $table['options'];
-			if (true === $options['table_head']) {
-				$json_labels = json_encode($data[0]);
-				unset($data[0]);
+		printf("<pre><code>%s</code></pre>",print_r($render_options,true));
+		if ( ! empty( $render_options['chartist'] ) &&  true ===  $render_options['chartist'] ) {
+
+			if(!get_transient(self::$cache_prefix . $table['id'])) {
+				$data = $table['data'];
+				$options = $table['options'];
+				if (true === $options['table_head']) {
+					$json_labels = json_encode($data[0]);
+					unset($data[0]);
+				}
+				$json_data = json_encode(array_merge($data));
+
+				// save chartist data as transient
+
+				$json_chart_template = (true === $options['table_head']) ? "{ labels: %s, series: %s }" : "{ series: %s }" ;
+				if ( true === $options['table_head'] ) {
+					$json_chart_data = sprintf($json_chart_template, $json_labels, $json_data );
+				} else {
+					$json_chart_data = sprintf($json_chart_template, $json_data );
+				}
+
+				set_transient(self::$cache_prefix . $table['id'], $json_chart_data, self::$cache_time);
 			}
-			$json_data = json_encode(array_merge($data));
-
-			// save chartist data as transient
-
-			$json_chart_template = (true === $options['table_head']) ? "{ labels: %s, series: %s }" : "{ series: %s }" ;
-			if ( true === $options['table_head'] ) {
-				$json_chart_data = sprintf($json_chart_template, $json_labels, $json_data );
-			} else {
-				$json_chart_data = sprintf($json_chart_template, $json_data );
-			}
-
-			set_transient(self::$cache_prefix . $table['id'], $json_chart_data, self::$cache_time);
 		}
 		return $table;
 	}
@@ -153,8 +157,9 @@ class TablePress_Chartist{
 	 */
 	public static function output_chart( $output, $table, $render_options ) {
 
-		if ( false !== ( $json_chart_data = get_transient(self::$cache_prefix . $table['id'])) {
-		$chartist_script = <<<EOSCRIPT
+		if ( ! empty( $render_options['chartist'] ) &&  true ===  $render_options['chartist'] ) {
+			if ( false !== ( $json_chart_data = get_transient(self::$cache_prefix . $table['id']))) {
+			$chartist_script = <<<EOSCRIPT
 <script type="text/javascript">
 jQuery( document ).ready( function(){
 	Chartist.Line('.ct-chart', {$json_chart_data});
@@ -162,10 +167,13 @@ jQuery( document ).ready( function(){
 </script>
 EOSCRIPT;
 
-		if ( ! empty( $render_options['chartist_table_display'] ) &&  false ===  $render_options['chartist_table_display'] )
-			return  "<div class='ct-chart ct-perfect-fourth'></div>" . $chartist_script;
+				if ( ! empty( $render_options['chartist_table_hide'] ) &&  true ===  $render_options['chartist_table_hide'] )
+					return  "<div class='ct-chart ct-perfect-fourth'></div>" . $chartist_script;
 
-		return "<div class='ct-chart ct-perfect-fourth'></div>" . $chartist_script . $output ;
+				return "<div class='ct-chart ct-perfect-fourth'></div>" . $chartist_script . $output ;
+			} else {
+				return $output;
+			}
 		} else {
 			return $output;
 		}
