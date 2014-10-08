@@ -29,6 +29,10 @@ Optional parameters:
 1. Activate the plugin via the Plugins admin page
 
 
+== Screenshots ==
+
+1. Sample chart
+
 == Changelog ==
 
 = 0.1 =

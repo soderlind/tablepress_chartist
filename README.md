@@ -1,6 +1,6 @@
 #TablePress Extension: Chartist
 
-![Sample chart](tablepress_chartist.png)
+![Sample chart](assets/screenshot-1.png)
 
 ##About
 
