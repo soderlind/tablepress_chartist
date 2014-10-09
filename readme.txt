@@ -48,7 +48,7 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 
 == Changelog ==
 = 0.3 =
-* 0.3 Added support for custom.css
+* 0.3 Added support for CSS customizations
 = 0.2 =
 * Added more optional parameters
 = 0.1 =
