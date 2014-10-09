@@ -140,12 +140,11 @@ class TablePress_Chartist {
 			return $output;
 		}
 
-		$data = $table['data'];
 		if ( $render_options['table_head'] ) {
-			$json_labels = json_encode( $data[0] );
-			unset( $data[0] );
+			$head_row = array_shift( $table['data'] );
+			$json_labels = json_encode( $head_row );
 		}
-		$json_data = json_encode( array_merge( $data ) );
+		$json_data = json_encode( $table['data'] );
 
 		$json_chart_template = ( $render_options['table_head'] ) ? "{ labels: %s, series: %s }" : "{ series: %s }";
 		if ( $render_options['table_head'] ) {
