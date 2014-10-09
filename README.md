@@ -26,7 +26,7 @@ In TablePress, if table head is set, the extention will use the row as chart lab
 
 ##custom.css
 
-If you'd like to oweride [the default style](http://gionkunz.github.io/chartist-js/getting-started.html#the-sass-way), you can add a `custom.css` in the plugin directory. It will be loaded after `libdist/chartist.min.css`
+If you'd like to overide [the default style](http://gionkunz.github.io/chartist-js/getting-started.html#the-sass-way), you can add a `custom.css` in the plugin directory. It will be loaded after `libdist/chartist.min.css`
 
 ##Installation
 
