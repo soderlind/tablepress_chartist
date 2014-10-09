@@ -167,13 +167,14 @@ class TablePress_Chartist {
 		$chartist_script = <<<JS
 <script type="text/javascript">
 jQuery(document).ready(function(){
-	Chartist.Line('.ct-chart', {$json_chart_data}, {{$json_chart_option}});
+	Chartist.Line('#chartist-{$render_options['html_id']}', {$json_chart_data}, {{$json_chart_option}});
 });
 </script>
 JS;
 
 		$chartist_divtag = sprintf(
-			'<div class="ct-chart %s"></div>',
+			'<div id="%s" class="ct-chart %s"></div>',
+			"chartist-{$render_options['html_id']}",
 			( array_key_exists( $render_options['chartist_aspect_ratio'], self::$aspect_ratios ) ) ? self::$aspect_ratios[ $render_options['chartist_aspect_ratio'] ]: 'ct-perfect-fourth'
 		);
 
