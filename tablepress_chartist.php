@@ -12,7 +12,7 @@ Author URI: http://soderlind.no
 defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
 /**
- * Clear the transient cache when saving a table 
+ * Clear the transient cache when saving a table
  */
 add_action( 'tablepress_event_saved_table', array( 'TablePress_Chartist', 'clear_cache' ) );
 /**
@@ -52,9 +52,22 @@ class TablePress_Chartist{
 	 */
 	protected static $cache_time = 60;//43200; // 60 * 60 * 12
 
-
+	/**
+	 * Optional parameters
+	 *
+	 * @since 0.2
+	 * 
+	 * @var array
+	 */
 	protected static $option_atts = array('chartist_low','chartist_high','chartist_showLine','chartist_showArea','chartist_showPoint','chartist_lineSmooth');
 
+	/**
+	 * Available aspect ratios
+	 *
+	 * @since 0.2
+	 * 
+	 * @var array
+	 */
 	protected static $aspect_ratios = array(
 						'1'       => 'ct-square',
 						'15:16'   => 'ct-minor-second',
@@ -183,11 +196,6 @@ class TablePress_Chartist{
 	 * @param array  $table          The current table.
 	 * @param array  $render_options The render options for the table.
 	 * @return string                 The chart and, if enabled through the shortcode, the generated HTML for the table
-	 */
-	/*
-	  showPoint: false,
-  // Disable line smoothing
-  lineSmooth: false,
 	 */
 	public static function output_chart( $output, $table, $render_options ) {
 
