@@ -29,7 +29,7 @@ Optional parameters:
 
 = custom.css =
 
-If you'd like to overide [the default style](http://gionkunz.github.io/chartist-js/getting-started.html#the-sass-way), you can add a `custom.css` in the plugin directory. It will be loaded after `libdist/chartist.min.css`
+If you'd like to overide [the default style](http://gionkunz.github.io/chartist-js/getting-started.html#the-sass-way), you can add a `tablepress-chartist-custom.css` in `wp-content` directory. It will be loaded after the Extension's default CSS file `libdist/chartist.min.css`.
 
 
 == Installation ==

@@ -96,8 +96,8 @@ class TablePress_Chartist {
 		$dir = plugin_dir_url( __FILE__ );
 		wp_enqueue_script( 'chartist-js', $dir . 'libdist/chartist.min.js', array(), self::$version, true );
 		wp_enqueue_style( 'chartist-css', $dir . 'libdist/chartist.min.css', array(), self::$version );
-		if ( file_exists( plugin_dir_path( __FILE__ ) . 'custom.css' ) ) {
-			wp_enqueue_style( 'chartist-custom-css', $dir . 'custom.css', array( 'chartist-css' ), self::$version );
+		if ( file_exists( WP_CONTENT_DIR . '/tablepress-chartist-custom.css' ) ) {
+			wp_enqueue_style( 'chartist-custom-css', content_url( 'tablepress-chartist-custom.css' ), array( 'chartist-css' ), self::$version );
 		}
 	}
 
