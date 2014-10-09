@@ -12,10 +12,6 @@ Author URI: http://soderlind.no
 defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
 /**
- * Clear the transient cache when saving a table
- */
-add_action( 'tablepress_event_saved_table', array( 'TablePress_Chartist', 'clear_cache' ) );
-/**
  * Init TablePress_Row_Filter
  */
 add_action( 'tablepress_run', array( 'TablePress_Chartist', 'init' ) );
@@ -35,28 +31,12 @@ class TablePress_Chartist{
 	 * @var string
 	 */
 	protected static $version = '0.3';
-	/**
-	 * transient cache prefix
-	 *
-	 * @since 0.1
-	 *
-	 * @var string
-	 */
-	protected static $cache_prefix = 'tablepress_chartist_cache_';
-	/**
-	 * transient cache time
-	 *
-	 * @since 0.1
-	 *
-	 * @var int
-	 */
-	protected static $cache_time = 60;//43200; // 60 * 60 * 12
 
 	/**
 	 * Optional parameters
 	 *
 	 * @since 0.2
-	 * 
+	 *
 	 * @var array
 	 */
 	protected static $option_atts = array('chartist_low','chartist_high','chartist_showLine','chartist_showArea','chartist_showPoint','chartist_lineSmooth');
@@ -65,7 +45,7 @@ class TablePress_Chartist{
 	 * Available aspect ratios
 	 *
 	 * @since 0.2
-	 * 
+	 *
 	 * @var array
 	 */
 	protected static $aspect_ratios = array(
@@ -96,20 +76,8 @@ class TablePress_Chartist{
 		// load scripts and css
 		add_action('wp_enqueue_scripts', array(__CLASS__,'enqueue_scripts_styles'));
 
-		add_filter( 'tablepress_table_render_data', array( __CLASS__, 'save_chart_data' ), 9, 3 );
 		add_filter( 'tablepress_table_output', array( __CLASS__, 'output_chart' ), 10, 3 );
 		add_filter( 'tablepress_shortcode_table_default_shortcode_atts', array( __CLASS__, 'shortcode_attributes' ) );
-	}
-
-	/**
-	 * Remove transient cache
-	 *
-	 * @since 0.1
-	 * 
-	 * @param  int $id tablepress table id
-	 */
-	public static function clear_cache($id) {
-		delete_transient( self::$cache_prefix . $id);
 	}
 
 	/**
@@ -153,48 +121,10 @@ class TablePress_Chartist{
 	}
 
 	/**
-	 * Convert chart data to json and save as transient
-	 *
-	 * @since 0.1
-	 * 
-	 * @param array $table          The processed table.
-	 * @param array $orig_table     The unprocessed table.
-	 * @param array $render_options The render options for the table.
-	 * @return array               The processed table
-	 */
-	public static function save_chart_data( $table, $orig_table, $render_options ) {
-
-		if ( ! empty( $render_options['chartist'] ) &&  true ===  $render_options['chartist'] ) {
-
-			if(!get_transient(self::$cache_prefix . $table['id'])) {
-				$data = $table['data'];
-				$options = $table['options'];
-				if (true === $options['table_head']) {
-					$json_labels = json_encode($data[0]);
-					unset($data[0]);
-				}
-				$json_data = json_encode(array_merge($data));
-
-				// save chartist data as transient
-
-				$json_chart_template = (true === $options['table_head']) ? "{ labels: %s, series: %s }" : "{ series: %s }" ;
-				if ( true === $options['table_head'] ) {
-					$json_chart_data = sprintf($json_chart_template, $json_labels, $json_data );
-				} else {
-					$json_chart_data = sprintf($json_chart_template, $json_data );
-				}
-
-				set_transient(self::$cache_prefix . $table['id'], $json_chart_data, self::$cache_time);
-			}
-		}
-		return $table;
-	}
-
-	/**
 	 * [output_chart description]
 	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @param string $output         The generated HTML for the table.
 	 * @param array  $table          The current table.
 	 * @param array  $render_options The render options for the table.
@@ -203,7 +133,22 @@ class TablePress_Chartist{
 	public static function output_chart( $output, $table, $render_options ) {
 
 		if ( ! empty( $render_options['chartist'] ) &&  true ===  $render_options['chartist'] ) {
-			if ( false !== ( $json_chart_data = get_transient(self::$cache_prefix . $table['id']))) {
+
+				$data = $table['data'];
+				$options = $table['options'];
+				if (true === $options['table_head']) {
+					$json_labels = json_encode($data[0]);
+					unset($data[0]);
+				}
+				$json_data = json_encode(array_merge($data));
+
+				$json_chart_template = (true === $options['table_head']) ? "{ labels: %s, series: %s }" : "{ series: %s }" ;
+				if ( true === $options['table_head'] ) {
+					$json_chart_data = sprintf($json_chart_template, $json_labels, $json_data );
+				} else {
+					$json_chart_data = sprintf($json_chart_template, $json_data );
+				}
+
 				$json_chart_option = '';
 				foreach (self::$option_atts as $key) {
 					if (isset($render_options[strtolower($key)])) {
@@ -228,9 +173,6 @@ EOSCRIPT;
 					return  $chartist_divtag . $chartist_script;
 
 				return $chartist_divtag . $chartist_script . $output ;
-			} else {
-				return $output;
-			}
 		} else {
 			return $output;
 		}
