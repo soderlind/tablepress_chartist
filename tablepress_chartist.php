@@ -34,7 +34,7 @@ class TablePress_Chartist{
 	 *
 	 * @var string
 	 */
-	protected static $version = '0.1';
+	protected static $version = '0.2';
 	/**
 	 * transient cache prefix
 	 *
