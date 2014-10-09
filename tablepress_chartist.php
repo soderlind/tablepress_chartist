@@ -143,13 +143,12 @@ class TablePress_Chartist {
 		if ( $render_options['table_head'] ) {
 			$head_row = array_shift( $table['data'] );
 			$json_labels = json_encode( $head_row );
-		}
-		$json_data = json_encode( $table['data'] );
-
-		$json_chart_template = ( $render_options['table_head'] ) ? "{ labels: %s, series: %s }" : "{ series: %s }";
-		if ( $render_options['table_head'] ) {
+			$json_data = json_encode( $table['data'] );
+			$json_chart_template = "{ labels: %s, series: %s }";
 			$json_chart_data = sprintf( $json_chart_template, $json_labels, $json_data );
 		} else {
+			$json_data = json_encode( $table['data'] );
+			$json_chart_template = "{ series: %s }";
 			$json_chart_data = sprintf( $json_chart_template, $json_data );
 		}
 
