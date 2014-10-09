@@ -37,7 +37,12 @@ Optional parameters:
 
 == Screenshots ==
 
-1. Sample chart
+1. `[table id=1 chartist=true chartist_table_hide=true /]`
+2. `[table id=1 chartist=true chartist_table_hide=true chartist_showarea=true /]`
+3. `[table id=1 chartist=true chartist_table_hide=true chartist_showarea=true chartist_linesmooth=false/]`
+4. `[table id=1 chartist=true chartist_table_hide=true chartist_linesmooth=false chartist_showpoint=false/]`
+5. `[table id=1 chartist=true chartist_table_hide=true chartist_showarea=true chartist_showline=false chartist_showpoint=false/]`
+6. `[table id=1 chartist=true chartist_table_hide=true chartist_low=0 chartist_high=8 /]`
 
 == Changelog ==
 = 0.2 =
