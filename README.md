@@ -24,6 +24,10 @@ Add the `chartist=true` parameter to your TablePress shortcode, eg: `[table id=1
 
 In TablePress, if table head is set, the extention will use the row as chart labels.
 
+##custom.css
+
+If you'd like to oweride [the default style](http://gionkunz.github.io/chartist-js/getting-started.html#the-sass-way), you can add a `custom.css` in the plugin directory. It will be loaded after `libdist/chartist.min.css`
+
 ##Installation
 
 **Prerequisite:** The [TablePress](https://tablepress.org/) plugin
@@ -33,6 +37,7 @@ In TablePress, if table head is set, the extention will use the row as chart lab
 
 
 ##Changelog
+* 0.3 Added support for custom.css
 * 0.2 Added more optional parameters
 * 0.1 Initial release (i.e. an early beta)
 

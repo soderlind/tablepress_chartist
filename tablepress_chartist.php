@@ -3,7 +3,7 @@
 Plugin Name: TablePress Extension: Chartist
 Plugin URI: https://github.com/soderlind/tablepress_chartist
 Description: Extension for TablePress to create a responsive chart based on the data in your TablePress table.
-Version: 0.2
+Version: 0.3
 Author: Per Soderlind
 Author URI: http://soderlind.no
 */
@@ -34,7 +34,7 @@ class TablePress_Chartist{
 	 *
 	 * @var string
 	 */
-	protected static $version = '0.2';
+	protected static $version = '0.3';
 	/**
 	 * transient cache prefix
 	 *
@@ -122,6 +122,9 @@ class TablePress_Chartist{
 		$dir = plugin_dir_url( __FILE__ );
 		wp_enqueue_script( 'chartist-js', $dir . 'libdist/chartist.min.js', array(), self::$version, true );
 		wp_enqueue_style( 'chartist-css', $dir . 'libdist/chartist.min.css',array(),self::$version);
+		if (file_exists(plugin_dir_path( __FILE__ ) . 'custom.css')) {
+			wp_enqueue_style( 'chartist-custo-css', $dir . 'custom.css',array('chartist-css'),self::$version);
+		}
 	}
 
 

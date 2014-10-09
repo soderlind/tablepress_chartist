@@ -28,6 +28,10 @@ Optional parameters:
 * Enable/disable line points: `chartist_showpoint=true` (default:true)
 * Set chart aspect ratio: `chartist_aspect_ratio=3:4` (default:3:4) Alternatives: 1, 15:16, 8:9, 5:6, 4:5, 3:4, 2:3, 5:8, 1:1.618, 3:5, 9:16, 8:15, 1:2, 2:5, 3:8, 1:3 or 1:4
 
+= custom.css =
+
+If you'd like to oweride [the default style](http://gionkunz.github.io/chartist-js/getting-started.html#the-sass-way), you can add a `custom.css` in the plugin directory. It will be loaded after `libdist/chartist.min.css`
+
 
 == Installation ==
 
@@ -45,6 +49,8 @@ Optional parameters:
 6. `[table id=1 chartist=true chartist_table_hide=true chartist_low=0 chartist_high=8 /]`
 
 == Changelog ==
+= 0.3 =
+* 0.3 Added support for custom.css
 = 0.2 =
 * Added more optional parameters
 = 0.1 =
