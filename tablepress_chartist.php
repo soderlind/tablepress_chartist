@@ -105,7 +105,7 @@ class TablePress_Chartist{
 	 * @return array Extended attributes for the Shortcode
 	 */
 	public static function shortcode_attributes( $default_atts ) {
-		$default_atts['chartist'] = '';
+		$default_atts['chartist'] = false;
 		$default_atts['chartist_aspect_ratio'] = '3:4';
 		$default_atts['chartist_low'] = '';
 		$default_atts['chartist_high'] = '';
@@ -131,34 +131,36 @@ class TablePress_Chartist{
 	 */
 	public static function output_chart( $output, $table, $render_options ) {
 
-		if ( ! empty( $render_options['chartist'] ) &&  true ===  $render_options['chartist'] ) {
+		if ( ! $render_options['chartist'] ) {
+			return $output;
+		}
 
-				$data = $table['data'];
-				$options = $table['options'];
-				if (true === $options['table_head']) {
-					$json_labels = json_encode($data[0]);
-					unset($data[0]);
-				}
-				$json_data = json_encode(array_merge($data));
+		$data = $table['data'];
+		$options = $table['options'];
+		if (true === $options['table_head']) {
+			$json_labels = json_encode($data[0]);
+			unset($data[0]);
+		}
+		$json_data = json_encode(array_merge($data));
 
-				$json_chart_template = (true === $options['table_head']) ? "{ labels: %s, series: %s }" : "{ series: %s }" ;
-				if ( true === $options['table_head'] ) {
-					$json_chart_data = sprintf($json_chart_template, $json_labels, $json_data );
-				} else {
-					$json_chart_data = sprintf($json_chart_template, $json_data );
-				}
+		$json_chart_template = (true === $options['table_head']) ? "{ labels: %s, series: %s }" : "{ series: %s }" ;
+		if ( true === $options['table_head'] ) {
+			$json_chart_data = sprintf($json_chart_template, $json_labels, $json_data );
+		} else {
+			$json_chart_data = sprintf($json_chart_template, $json_data );
+		}
 
-				$json_chart_option = '';
-				foreach (self::$option_atts as $key) {
-					if (isset($render_options[strtolower($key)])) {
-						$json_chart_option .= sprintf('%s %s: %s', ('' !== $json_chart_option)? ',':''
-							                               , str_replace('chartist_', '', $key)
-							                               , var_export($render_options[strtolower($key)],true)
-							                         );
-					}
-				}
+		$json_chart_option = '';
+		foreach (self::$option_atts as $key) {
+			if (isset($render_options[strtolower($key)])) {
+				$json_chart_option .= sprintf('%s %s: %s', ('' !== $json_chart_option)? ',':''
+					                               , str_replace('chartist_', '', $key)
+					                               , var_export($render_options[strtolower($key)],true)
+					                         );
+			}
+		}
 
-				$chartist_script = <<<EOSCRIPT
+		$chartist_script = <<<EOSCRIPT
 <script type="text/javascript">
 jQuery( document ).ready( function(){
 	Chartist.Line('.ct-chart', {$json_chart_data}, {{$json_chart_option}});
@@ -166,11 +168,8 @@ jQuery( document ).ready( function(){
 </script>
 EOSCRIPT;
 
-				$chartist_divtag = sprintf('<div class="ct-chart %s"></div>',(array_key_exists($render_options['chartist_aspect_ratio'],self::$aspect_ratios)) ? self::$aspect_ratios[$render_options['chartist_aspect_ratio']]: 'ct-perfect-fourth');
+		$chartist_divtag = sprintf('<div class="ct-chart %s"></div>',(array_key_exists($render_options['chartist_aspect_ratio'],self::$aspect_ratios)) ? self::$aspect_ratios[$render_options['chartist_aspect_ratio']]: 'ct-perfect-fourth');
 
-				return $chartist_divtag . $chartist_script;
-		} else {
-			return $output;
-		}
+		return $chartist_divtag . $chartist_script;
 	}
 }
