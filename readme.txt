@@ -7,11 +7,11 @@ Tested up to: 4.0
 Stable tag: trunk
 License: GPLv2 or later
 
-Extension for TablePress to create a chart based on the data in your TablePress table
+Extension for TablePress to create a responsive chart based on the data in your TablePress table
 
 == Description ==
 
-Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this TablePress extension  creates a chart based on the data in your TablePress table
+Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this TablePress extension  creates a responsive chart based on the data in your TablePress table
 
 = Use =
 

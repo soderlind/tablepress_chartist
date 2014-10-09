@@ -2,7 +2,7 @@
 /*
 Plugin Name: TablePress Extension: Chartist
 Plugin URI: https://github.com/soderlind/tablepress_chartist
-Description: Extension for TablePress to create a chart based on the data in your TablePress table.
+Description: Extension for TablePress to create a responsive chart based on the data in your TablePress table.
 Version: 0.2
 Author: Per Soderlind
 Author URI: http://soderlind.no

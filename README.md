@@ -4,7 +4,7 @@
 
 ##About
 
-Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this [TablePress](https://tablepress.org/) extension  creates a chart based on the data in your TablePress table
+Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this [TablePress](https://tablepress.org/) extension  creates a responsive chart based on the data in your TablePress table
 
 
 ##Usage
