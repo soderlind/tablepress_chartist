@@ -19,7 +19,6 @@ Add the `chartist=true` parameter to your TablePress shortcode, eg: `[table id=1
 
 Optional parameters:
 
-* Hide/show the table: `chartist_table_hide=true` (default:false)
 * Show/hide chart line: `chartist_showline=true`(default:true)
 * Show/hide show chart area: `chartist_showarea=false` (default:false)
 * Set chart y low: `chartist_low=0` (default: table low)
@@ -41,12 +40,12 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 
 == Screenshots ==
 
-1. `[table id=1 chartist=true chartist_table_hide=true /]`
-2. `[table id=1 chartist=true chartist_table_hide=true chartist_showarea=true /]`
-3. `[table id=1 chartist=true chartist_table_hide=true chartist_showarea=true chartist_linesmooth=false/]`
-4. `[table id=1 chartist=true chartist_table_hide=true chartist_linesmooth=false chartist_showpoint=false/]`
-5. `[table id=1 chartist=true chartist_table_hide=true chartist_showarea=true chartist_showline=false chartist_showpoint=false/]`
-6. `[table id=1 chartist=true chartist_table_hide=true chartist_low=0 chartist_high=8 /]`
+1. `[table id=1 chartist=true /]`
+2. `[table id=1 chartist=true chartist_showarea=true /]`
+3. `[table id=1 chartist=true chartist_showarea=true chartist_linesmooth=false /]`
+4. `[table id=1 chartist=true chartist_linesmooth=false chartist_showpoint=false /]`
+5. `[table id=1 chartist=true chartist_showarea=true chartist_showline=false chartist_showpoint=false /]`
+6. `[table id=1 chartist=true chartist_low=0 chartist_high=8 /]`
 
 == Changelog ==
 = 0.3 =

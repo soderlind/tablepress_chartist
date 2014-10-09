@@ -106,7 +106,6 @@ class TablePress_Chartist{
 	 */
 	public static function shortcode_attributes( $default_atts ) {
 		$default_atts['chartist'] = '';
-		$default_atts['chartist_table_hide'] = false;
 		$default_atts['chartist_aspect_ratio'] = '3:4';
 		$default_atts['chartist_low'] = '';
 		$default_atts['chartist_high'] = '';
@@ -128,7 +127,7 @@ class TablePress_Chartist{
 	 * @param string $output         The generated HTML for the table.
 	 * @param array  $table          The current table.
 	 * @param array  $render_options The render options for the table.
-	 * @return string                 The chart and, if enabled through the shortcode, the generated HTML for the table
+	 * @return string The generated HTML and JavaScript code for the chart.
 	 */
 	public static function output_chart( $output, $table, $render_options ) {
 
@@ -169,10 +168,7 @@ EOSCRIPT;
 
 				$chartist_divtag = sprintf('<div class="ct-chart %s"></div>',(array_key_exists($render_options['chartist_aspect_ratio'],self::$aspect_ratios)) ? self::$aspect_ratios[$render_options['chartist_aspect_ratio']]: 'ct-perfect-fourth');
 
-				if ( ! empty( $render_options['chartist_table_hide'] ) &&  true ===  $render_options['chartist_table_hide'] )
-					return  $chartist_divtag . $chartist_script;
-
-				return $chartist_divtag . $chartist_script . $output ;
+				return $chartist_divtag . $chartist_script;
 		} else {
 			return $output;
 		}

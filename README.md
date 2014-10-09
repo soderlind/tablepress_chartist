@@ -13,7 +13,6 @@ Add the `chartist=true` parameter to your TablePress shortcode, eg: `[table id=1
 
 **Optional parameters**
 
-* Hide/show the TablePress table: `chartist_table_hide=true` (default:false)
 * Show/hide chart line: `chartist_showline=true`(default:true)
 * Show/hide show chart area: `chartist_showarea=false` (default:false)
 * Set chart y low: `chartist_low=0` (default: table low)
