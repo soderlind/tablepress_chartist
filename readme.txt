@@ -47,6 +47,8 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 6. `[table id=1 chartist=true chartist_low=0 chartist_high=8 /]`
 
 == Changelog ==
+= 0.3.1 =
+* Added bin
 = 0.3 =
 * 0.3 Added support for CSS customizations
 = 0.2 =
