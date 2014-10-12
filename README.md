@@ -31,8 +31,9 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 
 **Prerequisite:** The [TablePress](https://tablepress.org/) plugin
 
-1. Copy the `tablepress_chartist` folder into your `wp-content/plugins` folder.
-1. Activate the plugin via the "Plugins" admin screen in WordPress.
+1. In `Plugins->Add New`, search for `tablepress chartist`
+1. Click `Install Now`
+1. When the plugin is installed, activate it.
 
 ##Changelog
 * 0.4 Added support for bar chart: `chartist_chart=bar`
