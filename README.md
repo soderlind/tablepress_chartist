@@ -19,6 +19,7 @@ Add the `chartist=true` parameter to your TablePress shortcode, e.g.: `[table id
 * Enable/disable smooth line: `chartist_linesmooth=true` (default: true)
 * Enable/disable line points: `chartist_showpoint=true` (default: true)
 * Set chart aspect ratio: `chartist_aspect_ratio=3:4` (default: 3:4) Alternatives: 1, 15:16, 8:9, 5:6, 4:5, 3:4, 2:3, 5:8, 1:1.618, 3:5, 9:16, 8:15, 1:2, 2:5, 3:8, 1:3, or 1:4
+* Select chart type: `chartist_chart=bar`(default: line) Alternatives: line or bar
 
 If the "Table Head Row" option is set for the table, the Extension will use the head row data for the chart labels.
 
@@ -34,6 +35,7 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 1. Activate the plugin via the "Plugins" admin screen in WordPress.
 
 ##Changelog
+* 0.4 Added support for bar chart: `chartist_chart=bar`
 * 0.3 Added support for CSS customizations
 * 0.2 Added more optional parameters
 * 0.1 Initial release (i.e. an early beta)

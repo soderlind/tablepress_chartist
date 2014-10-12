@@ -3,7 +3,7 @@
 Plugin Name: TablePress Extension: Chartist
 Plugin URI: https://github.com/soderlind/tablepress_chartist
 Description: Extension for TablePress to create a responsive chart based on the data in a TablePress table.
-Version: 0.3
+Version: 0.4
 Author: Per Soderlind
 Author URI: http://soderlind.no/
 */
@@ -116,6 +116,7 @@ class TablePress_Chartist {
 		$default_atts['chartist_high'] = '';
 		$default_atts['chartist_width'] = '';
 		$default_atts['chartist_height'] = '';
+		$default_atts['chartist_chart'] = 'line';
 		$default_atts['chartist_showline'] = true;
 		$default_atts['chartist_showarea'] = false;
 		$default_atts['chartist_showpoint'] = true;
@@ -152,6 +153,8 @@ class TablePress_Chartist {
 			$json_chart_data = sprintf( $json_chart_template, $json_data );
 		}
 
+		$chart = ('bar' === strtolower($render_options['chartist_chart'])) ? 'Bar' : 'Line';
+
 		$json_chart_option = '';
 		foreach ( self::$option_atts as $key ) {
 			if ( isset( $render_options[ strtolower( $key ) ] ) ) {
@@ -167,7 +170,7 @@ class TablePress_Chartist {
 		$chartist_script = <<<JS
 <script type="text/javascript">
 jQuery(document).ready(function(){
-	Chartist.Line('#chartist-{$render_options['html_id']}', {$json_chart_data}, {{$json_chart_option}});
+	Chartist.{$chart}('#chartist-{$render_options['html_id']}', {$json_chart_data}, {{$json_chart_option}});
 });
 </script>
 JS;

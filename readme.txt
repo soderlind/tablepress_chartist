@@ -4,7 +4,7 @@ Donate link: http://soderlind.no/donate/
 Tags: tablepress, table, chart
 Requires at least: 3.9
 Tested up to: 4.0
-Stable tag: 0.3
+Stable tag: 0.4
 License: GPLv2 or later
 
 Extension for TablePress to create a responsive chart based on the data in a TablePress table.
@@ -26,6 +26,9 @@ Optional parameters:
 * Enable/disable smooth line: `chartist_linesmooth=true` (default: true)
 * Enable/disable line points: `chartist_showpoint=true` (default: true)
 * Set chart aspect ratio: `chartist_aspect_ratio=3:4` (default: 3:4) Alternatives: 1, 15:16, 8:9, 5:6, 4:5, 3:4, 2:3, 5:8, 1:1.618, 3:5, 9:16, 8:15, 1:2, 2:5, 3:8, 1:3, or 1:4
+* Select chart type: `chartist_chart=bar`(default: line) Alternatives: line or bar
+
+If the "Table Head Row" option is set for the table, the Extension will use the head row data for the chart labels.
 
 = CSS customizations =
 
@@ -45,8 +48,11 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 4. `[table id=1 chartist=true chartist_linesmooth=false chartist_showpoint=false /]`
 5. `[table id=1 chartist=true chartist_showarea=true chartist_showline=false chartist_showpoint=false /]`
 6. `[table id=1 chartist=true chartist_low=0 chartist_high=8 /]`
+7. `[table id=1 chartist=true chartist_chart=bar /]`
 
 == Changelog ==
+= 0.4 =
+* Added support for bar chart: `chartist_chart=bar`
 = 0.3 =
 * 0.3 Added support for CSS customizations
 = 0.2 =
