@@ -11,7 +11,7 @@ Extension for TablePress to create a responsive chart based on the data in a Tab
 
 == Description ==
 
-Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this TablePress extension creates a responsive chart based on the data in a TablePress table.
+Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this [TablePress](https://wordpress.org/plugins/tablepress/) extension creates a responsive chart based on the data in a TablePress table.
 
 = Use =
 
@@ -36,9 +36,11 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 
 == Installation ==
 
-1. Install the TablePress plugin.
-1. Copy the `tablepress_chartist` folder into your `wp-content/plugins` folder.
-1. Activate the plugin via the "Plugins" admin screen in WordPress.
+Prerequisite (install first): The [TablePress](https://wordpress.org/plugins/tablepress/) plugin
+
+1. In Plugins->Add New, search for tablepress chartist
+1. Click Install Now
+1. When the plugin is installed, activate it.
 
 == Screenshots ==
 
