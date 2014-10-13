@@ -49,7 +49,7 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 	stroke-width: 10px;
 	stroke-linecap: round;
 }
-`
+```
 
 ##Installation
 
