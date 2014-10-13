@@ -7,7 +7,7 @@ Tested up to: 4.0
 Stable tag: 0.4
 License: GPLv2 or later
 
-Extension for TablePress to create a responsive chart based on the data in a TablePress table.
+Create a responsive chart based on the data in a TablePress table.
 
 == Description ==
 
@@ -34,12 +34,36 @@ If the "Table Head Row" option is set for the table, the Extension will use the 
 
 If you'd like to overide [the default style](http://gionkunz.github.io/chartist-js/getting-started.html#the-sass-way), you can add a `tablepress-chartist-custom.css` in `wp-content` directory. It will be loaded after the Extension's default CSS file `libdist/chartist.min.css`.
 
+**Example:**
+`
+/**
+ * SVG Shape CSS properties: http://tutorials.jenkov.com/svg/svg-and-css.html#shape-css-properties
+ */
+
+/* First line / bar is .ct-series-a, next is .ct-series-b etc. */
+.ct-chart .ct-series.ct-series-a .ct-bar,
+.ct-chart .ct-series.ct-series-a .ct-line,
+.ct-chart .ct-series.ct-series-a .ct-point  {
+	stroke: #073DA0;
+}
+
+.ct-series .ct-line, .ct-chart .ct-bar {
+	fill: none;
+	stroke-width: 10px;
+}
+
+.ct-chart .ct-point {
+	stroke-width: 10px;
+	stroke-linecap: round;
+}
+`
+
 == Installation ==
 
 Prerequisite (install first): The [TablePress](https://wordpress.org/plugins/tablepress/) plugin
 
-1. In Plugins->Add New, search for tablepress chartist
-1. Click Install Now
+1. In `Plugins->Add New`, search for `tablepress chartist`
+1. Click `Install Now`
 1. When the plugin is installed, activate it.
 
 == Screenshots ==
