@@ -3,7 +3,7 @@
 Plugin Name: TablePress Extension: Chartist
 Plugin URI: https://github.com/soderlind/tablepress_chartist
 Description: Extension for TablePress to create a responsive chart based on the data in a TablePress table.
-Version: 0.4
+Version: 0.5
 Author: Per Soderlind
 Author URI: http://soderlind.no/
 */
@@ -29,7 +29,7 @@ class TablePress_Chartist {
 	 * @since 0.1
 	 * @var string
 	 */
-	protected static $version = '0.3';
+	protected static $version = '0.5';
 
 	/**
 	 * Optional parameters for the Shortcode.
@@ -38,12 +38,12 @@ class TablePress_Chartist {
 	 * @var array
 	 */
 	protected static $option_atts = array(
-		'chartist_low',
-		'chartist_high',
-		'chartist_showLine',
-		'chartist_showArea',
-		'chartist_showPoint',
-		'chartist_lineSmooth',
+		'low',
+		'high',
+		'showLine',
+		'showArea',
+		'showPoint',
+		'lineSmooth',
 	);
 
 	/**
@@ -94,7 +94,7 @@ class TablePress_Chartist {
 	 */
 	public static function enqueue_scripts_styles () {
 		$dir = plugin_dir_url( __FILE__ );
-		wp_enqueue_script( 'chartist-js', $dir . 'libdist/chartist.min.js', array(), self::$version, true );
+		wp_enqueue_script( 'chartist-js', $dir . 'libdist/chartist.min.js', array('jquery'), self::$version, true );
 		wp_enqueue_style( 'chartist-css', $dir . 'libdist/chartist.min.css', array(), self::$version );
 		if ( file_exists( WP_CONTENT_DIR . '/tablepress-chartist-custom.css' ) ) {
 			wp_enqueue_style( 'chartist-custom-css', content_url( 'tablepress-chartist-custom.css' ), array( 'chartist-css' ), self::$version );
@@ -111,16 +111,16 @@ class TablePress_Chartist {
 	 */
 	public static function shortcode_attributes( $default_atts ) {
 		$default_atts['chartist'] = false;
-		$default_atts['chartist_aspect_ratio'] = '3:4';
-		$default_atts['chartist_low'] = '';
-		$default_atts['chartist_high'] = '';
-		$default_atts['chartist_width'] = '';
-		$default_atts['chartist_height'] = '';
-		$default_atts['chartist_chart'] = 'line';
-		$default_atts['chartist_showline'] = true;
-		$default_atts['chartist_showarea'] = false;
-		$default_atts['chartist_showpoint'] = true;
-		$default_atts['chartist_linesmooth'] = true;
+		$default_atts['aspect_ratio'] = '3:4';
+		$default_atts['low'] = '';
+		$default_atts['high'] = '';
+		$default_atts['width'] = '';
+		$default_atts['height'] = '';
+		$default_atts['chart'] = 'line';
+		$default_atts['showline'] = true;
+		$default_atts['showarea'] = false;
+		$default_atts['showpoint'] = true;
+		$default_atts['linesmooth'] = true;
 
 		return $default_atts;
 	}
@@ -141,46 +141,116 @@ class TablePress_Chartist {
 			return $output;
 		}
 
+		$chart_id = str_replace('-', '_', $render_options['html_id']);
+		$json_chart_option = '';
+		switch (strtolower($render_options['chart'])) {
+			case 'bar':
+				$chart = 'Bar';
+				break;
+			case 'pie':
+				$chart = 'Pie';
+				$json_chart_option = "labelInterpolationFnc: function(value) {return value[0]}";
+				break;
+			case 'percent':
+				$chart = 'Pie';
+				$json_chart_option = "labelInterpolationFnc: function(value) { return Math.round(value / data_{$chart_id}.series.reduce(sum_{$chart_id}) * 100) + '%'; }";
+				break;
+			default:
+				$chart = 'Line';
+				break;
+		}
+
 		if ( $render_options['table_head'] ) {
 			$head_row = array_shift( $table['data'] );
-			$json_labels = json_encode( $head_row );
-			$json_data = json_encode( $table['data'] );
-			$json_chart_template = "{ labels: %s, series: %s }";
-			$json_chart_data = sprintf( $json_chart_template, $json_labels, $json_data );
+			$json_labels = self::_json_encode( $head_row );
+			$json_data = self::_json_encode( ('Pie' !== $chart) ? $table['data'] : array_shift( $table['data'] )); // if 'Pie' only use the first row
+			if ('percent' === strtolower($render_options['chart'])) {
+				$json_chart_template = "series: %s";
+				$json_chart_data = sprintf( $json_chart_template,  $json_data );
+			} else {
+				$json_chart_template = "labels: %s, series: %s";
+				$json_chart_data = sprintf( $json_chart_template, $json_labels, $json_data );
+			}
 		} else {
-			$json_data = json_encode( $table['data'] );
-			$json_chart_template = "{ series: %s }";
+			$json_data = self::_json_encode( ('Pie' !== $chart) ? $table['data'] : array_shift( $table['data'] )); // if 'Pie' only use the first row
+			$json_chart_template = "series: %s";
 			$json_chart_data = sprintf( $json_chart_template, $json_data );
 		}
 
-		$chart = ('bar' === strtolower($render_options['chartist_chart'])) ? 'Bar' : 'Line';
-
-		$json_chart_option = '';
-		foreach ( self::$option_atts as $key ) {
-			if ( isset( $render_options[ strtolower( $key ) ] ) ) {
-				$json_chart_option .= sprintf(
-					'%s %s: %s',
-					( '' !== $json_chart_option ) ? ',' : '',
-					str_replace( 'chartist_', '', $key ),
-					var_export( $render_options[ strtolower( $key ) ], true )
-				);
+		if ('' === $json_chart_option) {
+			foreach ( self::$option_atts as $key ) {
+				if ( isset( $render_options[ strtolower( $key ) ] ) ) {
+					$json_chart_option .= sprintf(
+						'%s %s: %s',
+						( '' !== $json_chart_option ) ? ',' : '',
+						$key,
+						var_export( $render_options[ strtolower( $key ) ], true )
+					);
+				}
 			}
 		}
-
 		$chartist_script = <<<JS
 <script type="text/javascript">
 jQuery(document).ready(function(){
-	Chartist.{$chart}('#chartist-{$render_options['html_id']}', {$json_chart_data}, {{$json_chart_option}});
+	var data_{$chart_id} = {
+		{$json_chart_data}
+	};
+	var options_{$chart_id} = {
+		{$json_chart_option}
+	}
+	var sum_{$chart_id} = function(a, b) { return a + b };
+	new Chartist.{$chart}('#chartist_{$chart_id}', data_{$chart_id}, options_{$chart_id});
 });
 </script>
 JS;
 
 		$chartist_divtag = sprintf(
 			'<div id="%s" class="ct-chart %s"></div>',
-			"chartist-{$render_options['html_id']}",
-			( array_key_exists( $render_options['chartist_aspect_ratio'], self::$aspect_ratios ) ) ? self::$aspect_ratios[ $render_options['chartist_aspect_ratio'] ]: 'ct-perfect-fourth'
+			"chartist_{$chart_id}",
+			( array_key_exists( $render_options['aspect_ratio'], self::$aspect_ratios ) ) ? self::$aspect_ratios[ $render_options['aspect_ratio'] ]: 'ct-perfect-fourth'
 		);
 
 		return $chartist_divtag . $chartist_script;
 	}
+
+
+	/**
+	 * alternative json_encode, from http://php.net/manual/en/function.json-encode.php#113219
+	 *
+	 * json_encode, prior to PHP 5.33, returns an quoted string per value. _json_encode returns unquoted numerics.
+	 *
+	 * @since 0.5
+	 *
+	 * @param  mixed $val  The value being encoded. Can be any type.
+	 * @return string      json string
+	 */
+	protected static function _json_encode($val)
+	{
+	    if (is_numeric($val)) return $val;
+	    if (is_string($val)) return '"'.addslashes($val).'"';
+	    if ($val === null) return 'null';
+	    if ($val === true) return 'true';
+	    if ($val === false) return 'false';
+
+	    $assoc = false;
+	    $i = 0;
+	    foreach ($val as $k=>$v){
+	        if ($k !== $i++){
+	            $assoc = true;
+	            break;
+	        }
+	    }
+	    $res = array();
+	    foreach ($val as $k=>$v){
+	        $v = self::_json_encode($v);
+	        if ($assoc){
+	            $k = '"'.addslashes($k).'"';
+	            $v = $k.':'.$v;
+	        }
+	        $res[] = $v;
+	    }
+	    $res = implode(',', $res);
+	    return ($assoc)? '{'.$res.'}' : '['.$res.']';
+	}
+
 }
