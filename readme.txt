@@ -1,10 +1,10 @@
 === TablePress Extension: Chartist ===
 Contributors: PerS
 Donate link: http://soderlind.no/donate/
-Tags: tablepress, table, chart
+Tags: tablepress, table, chart, responsive
 Requires at least: 3.9
 Tested up to: 4.0
-Stable tag: 0.4
+Stable tag: 0.5
 License: GPLv2 or later
 
 Create a responsive chart based on the data in a TablePress table.
