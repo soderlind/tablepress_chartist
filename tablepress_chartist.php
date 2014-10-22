@@ -153,7 +153,7 @@ class TablePress_Chartist {
 				break;
 			case 'percent':
 				$chart = 'Pie';
-				$json_chart_option = "labelInterpolationFnc: function(value) { return Math.round(value / data_{$chart_id}.series.reduce(sum_{$chart_id}) * 100) + '%'; }";
+				$json_chart_option = "labelInterpolationFnc: function(value) { return Math.round(Number(value) / data_{$chart_id}.series.reduce(sum_{$chart_id}) * 100) + '%'; }";
 				break;
 			default:
 				$chart = 'Line';
@@ -162,18 +162,18 @@ class TablePress_Chartist {
 
 		if ( $render_options['table_head'] ) {
 			$head_row = array_shift( $table['data'] );
-			$json_labels = self::_json_encode( $head_row );
-			$json_data = self::_json_encode( ('Pie' !== $chart) ? $table['data'] : array_shift( $table['data'] )); // if 'Pie' only use the first row
+			$json_labels = json_encode( $head_row );
+			$json_data = json_encode( ('Pie' !== $chart) ? $table['data'] : array_shift( $table['data'] )); // if 'Pie' only use the first row
 			if ('percent' === strtolower($render_options['chart'])) {
-				$json_chart_template = "series: %s";
+				$json_chart_template = "series: %s.map(Number)";
 				$json_chart_data = sprintf( $json_chart_template,  $json_data );
 			} else {
-				$json_chart_template = "labels: %s, series: %s";
+				$json_chart_template = "labels: %s, series: %s.map(Number)";
 				$json_chart_data = sprintf( $json_chart_template, $json_labels, $json_data );
 			}
 		} else {
-			$json_data = self::_json_encode( ('Pie' !== $chart) ? $table['data'] : array_shift( $table['data'] )); // if 'Pie' only use the first row
-			$json_chart_template = "series: %s";
+			$json_data = json_encode( ('Pie' !== $chart) ? $table['data'] : array_shift( $table['data'] )); // if 'Pie' only use the first row
+			$json_chart_template = "series: %s.map(Number)";
 			$json_chart_data = sprintf( $json_chart_template, $json_data );
 		}
 
@@ -211,46 +211,6 @@ JS;
 		);
 
 		return $chartist_divtag . $chartist_script;
-	}
-
-
-	/**
-	 * alternative json_encode, from http://php.net/manual/en/function.json-encode.php#113219
-	 *
-	 * json_encode, prior to PHP 5.33, returns an quoted string per value. _json_encode returns unquoted numerics.
-	 *
-	 * @since 0.5
-	 *
-	 * @param  mixed $val  The value being encoded. Can be any type.
-	 * @return string      json string
-	 */
-	protected static function _json_encode($val)
-	{
-	    if (is_numeric($val)) return $val;
-	    if (is_string($val)) return '"'.addslashes($val).'"';
-	    if ($val === null) return 'null';
-	    if ($val === true) return 'true';
-	    if ($val === false) return 'false';
-
-	    $assoc = false;
-	    $i = 0;
-	    foreach ($val as $k=>$v){
-	        if ($k !== $i++){
-	            $assoc = true;
-	            break;
-	        }
-	    }
-	    $res = array();
-	    foreach ($val as $k=>$v){
-	        $v = self::_json_encode($v);
-	        if ($assoc){
-	            $k = '"'.addslashes($k).'"';
-	            $v = $k.':'.$v;
-	        }
-	        $res[] = $v;
-	    }
-	    $res = implode(',', $res);
-	    return ($assoc)? '{'.$res.'}' : '['.$res.']';
 	}
 
 }
