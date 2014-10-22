@@ -4,7 +4,7 @@ Donate link: http://soderlind.no/donate/
 Tags: tablepress, table, chart, responsive
 Requires at least: 3.9
 Tested up to: 4.0
-Stable tag: 0.5
+Stable tag: 0.5.1
 License: GPLv2 or later
 
 Create a responsive chart based on the data in a TablePress table.
@@ -79,6 +79,8 @@ Prerequisite (install first): The [TablePress](https://wordpress.org/plugins/tab
 9. `[table id=1 chartist=true chart=percent /]`
 
 == Changelog ==
+= 0.5.1 =
+* Revert to PHP json_encode
 = 0.5 =
 * **Breaking change**: Simplified optional parameters (removed prefix `chartist_`), new optional parameters are: showline, showarea, low, high, linesmooth, showpoint and aspect_ratio. See examples in [screenshots](https://wordpress.org/plugins/tablepress-chartist/screenshots/)
 * Added support for `chart=pie` and `chart=percent` 

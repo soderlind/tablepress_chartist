@@ -3,7 +3,7 @@
 Plugin Name: TablePress Extension: Chartist
 Plugin URI: https://github.com/soderlind/tablepress_chartist
 Description: Extension for TablePress to create a responsive chart based on the data in a TablePress table.
-Version: 0.5
+Version: 0.5.1
 Author: Per Soderlind
 Author URI: http://soderlind.no/
 */
@@ -29,7 +29,7 @@ class TablePress_Chartist {
 	 * @since 0.1
 	 * @var string
 	 */
-	protected static $version = '0.5';
+	protected static $version = '0.5.1';
 
 	/**
 	 * Optional parameters for the Shortcode.
@@ -153,27 +153,41 @@ class TablePress_Chartist {
 				break;
 			case 'percent':
 				$chart = 'Pie';
-				$json_chart_option = "labelInterpolationFnc: function(value) { return Math.round(Number(value) / data_{$chart_id}.series.reduce(sum_{$chart_id}) * 100) + '%'; }";
+				$json_chart_option = "labelInterpolationFnc: function(value) { return Math.round(value / data_{$chart_id}.series.reduce(sum_{$chart_id}) * 100) + '%'; }";
 				break;
 			default:
 				$chart = 'Line';
 				break;
 		}
 
+		//convert table values to numeric
+		foreach ( $table['data'] as $row_idx => $row ) {
+		  foreach ( $row as $col_idx => $cell ) {
+		    if ( is_numeric( $cell ) ) {
+		      if ( $cell == (int) $cell ) {
+		        $table['data'][ $row_idx ][ $col_idx ] = (int) $cell;
+		      } else {
+		        $table['data'][ $row_idx ][ $col_idx ] = (float) $cell;
+		      }
+		    }
+		  }
+		}
+
+
 		if ( $render_options['table_head'] ) {
 			$head_row = array_shift( $table['data'] );
 			$json_labels = json_encode( $head_row );
 			$json_data = json_encode( ('Pie' !== $chart) ? $table['data'] : array_shift( $table['data'] )); // if 'Pie' only use the first row
 			if ('percent' === strtolower($render_options['chart'])) {
-				$json_chart_template = "series: %s.map(Number)";
+				$json_chart_template = "series: %s";
 				$json_chart_data = sprintf( $json_chart_template,  $json_data );
 			} else {
-				$json_chart_template = "labels: %s, series: %s.map(Number)";
+				$json_chart_template = "labels: %s, series: %s";
 				$json_chart_data = sprintf( $json_chart_template, $json_labels, $json_data );
 			}
 		} else {
 			$json_data = json_encode( ('Pie' !== $chart) ? $table['data'] : array_shift( $table['data'] )); // if 'Pie' only use the first row
-			$json_chart_template = "series: %s.map(Number)";
+			$json_chart_template = "series: %s";
 			$json_chart_data = sprintf( $json_chart_template, $json_data );
 		}
 

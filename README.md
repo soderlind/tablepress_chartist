@@ -60,7 +60,7 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 1. When the plugin is installed, activate it.
 
 ##Changelog
-
+* 0.5.1 Revert to PHP json_encode
 * 0.5 **Breaking change**: Simplified optional parameters (removed prefix `chartist_`), new optional parameters are: showline, showarea, low, high, linesmooth, showpoint and aspect_ratio. See examples in [screenshots](https://wordpress.org/plugins/tablepress-chartist/screenshots/). Added support for `chart=pie` and `chart=percent` 
 * 0.4 Added support for bar chart: `chart=bar`
 * 0.3 Added support for CSS customizations
