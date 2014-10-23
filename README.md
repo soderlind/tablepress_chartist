@@ -8,10 +8,21 @@ Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this [TablePress](h
 
 ##Usage
 
-Add the `chartist=true` parameter to your TablePress shortcode, e.g.: `[table id=1 chartist=true /]`.
+If using the TablePress `[table]` shortcode, add the `chartist=true` parameter to your the shortcode, e.g.: `[table id=1 chartist=true /]`.
 
-**Optional parameters**
+**Optional parameters** using shortcode `[table]`:
+* Show/hide chart line: `chartist_showline=true` (default: true)
+* Show/hide show chart area: `chartist_showarea=false` (default: false)
+* Set chart y low: `chartist_low=0` (default: table low)
+* Set chart y high: `chartist_high=10` (default: table high)
+* Enable/disable smooth line: `chartist_linesmooth=true` (default: true)
+* Enable/disable line points: `chartist_showpoint=true` (default: true)
+* Set chart aspect ratio: `chartist_aspect_ratio=3:4` (default: 3:4) Alternatives: 1, 15:16, 8:9, 5:6, 4:5, 3:4, 2:3, 5:8, 1:1.618, 3:5, 9:16, 8:15, 1:2, 2:5, 3:8, 1:3, or 1:4
+* Select chart type: `chart=bar`(default: line) Alternatives: line, bar, pie or percent. Pie or percent will only use the first datarow. Percent will ignore the table head row.
 
+If using the `[table-chart]` shortcode, add the `id=<table id>` parameter to the `[table-chart]` shortcode, e.g.: `[table-chart id=1 /]`.
+
+**Optional parameters** using shortcode `[table-chart]`:
 * Show/hide chart line: `showline=true` (default: true)
 * Show/hide show chart area: `showarea=false` (default: false)
 * Set chart y low: `low=0` (default: table low)
@@ -21,7 +32,7 @@ Add the `chartist=true` parameter to your TablePress shortcode, e.g.: `[table id
 * Set chart aspect ratio: `aspect_ratio=3:4` (default: 3:4) Alternatives: 1, 15:16, 8:9, 5:6, 4:5, 3:4, 2:3, 5:8, 1:1.618, 3:5, 9:16, 8:15, 1:2, 2:5, 3:8, 1:3, or 1:4
 * Select chart type: `chart=bar`(default: line) Alternatives: line, bar, pie or percent. Pie or percent will only use the first datarow. Percent will ignore the table head row.
 
-If the "Table Head Row" option is set for the table, the Extension will use the head row data for the chart labels.
+If the "Table Head Row" option is set for the table, the extension will use the head row data for the chart labels.
 
 ##CSS customizations
 
@@ -60,6 +71,7 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 1. When the plugin is installed, activate it.
 
 ##Changelog
+* 0.6 Added optional shortcode `[table-chart]`. **Breaking change**: For the `[table]` shortcode, added prefix `chartist_` to optional parameters (sorry for the change).
 * 0.5.1 Revert to PHP json_encode
 * 0.5 **Breaking change**: Simplified optional parameters (removed prefix `chartist_`), new optional parameters are: showline, showarea, low, high, linesmooth, showpoint and aspect_ratio. See examples in [screenshots](https://wordpress.org/plugins/tablepress-chartist/screenshots/). Added support for `chart=pie` and `chart=percent` 
 * 0.4 Added support for bar chart: `chart=bar`
