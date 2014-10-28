@@ -32,18 +32,37 @@ class TablePress_Chartist {
 	protected static $version = '0.6';
 
 	/**
-	 * Optional parameters for the Shortcode.
+	 * Available Shortcode attributes, without the `chartist_` prefix.
 	 *
 	 * @since 0.2
 	 * @var array
 	 */
-	protected static $option_atts = array(
-		'low',
-		'high',
-		'showLine',
-		'showArea',
-		'showPoint',
-		'lineSmooth',
+	protected static $shortcode_attributes = array(
+		'low'          => '',
+		'high'         => '',
+		'width'        => '',
+		'height'       => '',
+		'chart'        => 'line',
+		'showline'     => true,
+		'showarea'     => false,
+		'showpoint'    => true,
+		'linesmooth'   => true,
+		'aspect_ratio' => '3:4',
+	);
+
+	/**
+	 * Mapping of some Shortcode parameters to their ChartistJS equivalent.
+	 *
+	 * @since 0.2
+	 * @var array
+	 */
+	protected static $attribute_to_js_mapping = array(
+		'low'        => 'low',
+		'high'       => 'high',
+		'showline'   => 'showLine',
+		'showarea'   => 'showArea',
+		'showpoint'  => 'showPoint',
+		'linesmooth' => 'lineSmooth',
 	);
 
 	/**
@@ -73,93 +92,40 @@ class TablePress_Chartist {
 	);
 
 	/**
-	 * Store table array
-	 *
-	 * @since 0.6
-	 * @var array
-	 */
-	protected static $table;
-
-	/**
-	 * Store render_options array
-	 *
-	 * @since 0.6
-	 * @var array
-	 */
-	protected static $render_options;
-
-	/**
-	 * chart number
-	 *
-	 * @since 0.6
-	 * @var integer
-	 */
-	protected static $num = 1;
-
-	/**
-	 * Register necessary plugin filter hooks.
+	 * Register necessary plugin filter hooks and the [table-chart] Shortcode.
 	 *
 	 * @since 0.1
 	 */
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__,'enqueue_scripts_styles' ) );
-		add_filter( 'tablepress_table_render_data', array( __CLASS__,'get_table' ), 10, 3 );
-		add_filter( 'tablepress_shortcode_table_default_shortcode_atts', array( __CLASS__, 'shortcode_attributes' ) );
-		add_filter( 'tablepress_table_output', array( __CLASS__, 'output_chart' ), 10, 3 );
-		add_shortcode('table-chart', array( __CLASS__, 'table_chart'));
+		add_filter( 'tablepress_shortcode_table_default_shortcode_atts', array( __CLASS__, 'register_shortcode_attributes' ) );
+		add_filter( 'tablepress_table_output', array( __CLASS__, 'generate_chart' ), 10, 3 );
+		add_shortcode( 'table-chart', array( __CLASS__, 'handle_table_chart_shortcode' ) );
 	}
 
 	/**
-	 * Save table and options arrays
+	 * Handle Shortcode [table-chart id=<ID> /] in `the_content()`.
 	 *
 	 * @since 0.6
-	 * 
-	 * @param  array $table          table array
-	 * @param  array $orig_table     original table array
-	 * @param  array $render_options options array
-	 * @return array                 table array
-	 */
-	public static function get_table($table, $orig_table, $render_options ) {
-		self::$table = $table;
-		self::$render_options = $render_options;
-		return $table;
-	}
-
-	/**
-	 * [table-chart] shortcode
 	 *
-	 * @since 0.6
-	 * 
-	 * @param  array $atts shortcode attributes
-	 * @return string      The generated HTML and JavaScript code for the chart.
+	 * @param array $shortcode_atts List of attributes that where included in the Shortcode.
+	 * @return string Generated HTML code for the chart with the ID <ID>.
 	 */
-	public static function table_chart($atts){
-
-		//cast string boolean to boolean ('false' to false)
-		if (isset($atts['showline']))   $atts['showline'] = 'true' === $atts['showline'];
-		if (isset($atts['showarea']))   $atts['showarea'] = 'true' === $atts['showarea'];
-		if (isset($atts['showpoint']))  $atts['showpoint'] = 'true' === $atts['showpoint'];
-		if (isset($atts['linesmooth'])) $atts['linesmooth'] = 'true' === $atts['linesmooth'];
-
-		$options = wp_parse_args( 
-			shortcode_atts(array(
-				'chartist'     => true,
-				'aspect_ratio' => '3:4',
-				'low'          => '',
-				'high'         => '',
-				'width'        => '',
-				'height'       => '',
-				'chart'        => 'line',
-				'showline'     => true,
-				'showarea'     => false,
-				'showpoint'    => true,
-				'linesmooth'   => true,
-				'shortcode'    => 'table-chart'
-			), $atts)
-			, self::$render_options
+	public static function handle_table_chart_shortcode( $shortcode_atts ){
+		// Generate the attribute query array for the template tag function.
+		$table_query = array(
+			'chartist' => true,
 		);
+		// Pass all parameters to the template tag parameters.
+		foreach ( (array) $shortcode_atts as $attribute => $value ) {
+			// Prepend 'chartist_' to all Shortcode attributes that the Extension understands.
+			if ( isset( self::$shortcode_attributes[ $attribute ] ) ) {
+				$attribute = 'chartist_' . $attribute;
+			}
+			$table_query[ $attribute ] = $value;
+		}
 
-		return self::output_chart ('', self::$table, $options);
+		return tablepress_get_table( $table_query );
 	}
 
 	/**
@@ -171,7 +137,7 @@ class TablePress_Chartist {
 	 */
 	public static function enqueue_scripts_styles () {
 		$dir = plugin_dir_url( __FILE__ );
-		wp_enqueue_script( 'chartist-js', $dir . 'libdist/chartist.min.js', array('jquery'), self::$version, true );
+		wp_enqueue_script( 'chartist-js', $dir . 'libdist/chartist.min.js', array( 'jquery' ), self::$version, true );
 		wp_enqueue_style( 'chartist-css', $dir . 'libdist/chartist.min.css', array(), self::$version );
 		if ( file_exists( WP_CONTENT_DIR . '/tablepress-chartist-custom.css' ) ) {
 			wp_enqueue_style( 'chartist-custom-css', content_url( 'tablepress-chartist-custom.css' ), array( 'chartist-css' ), self::$version );
@@ -186,19 +152,11 @@ class TablePress_Chartist {
 	 * @param array $default_atts Default attributes for the TablePress [table /] Shortcode.
 	 * @return array Extended attributes for the Shortcode.
 	 */
-	public static function shortcode_attributes( $default_atts ) {
+	public static function register_shortcode_attributes( $default_atts ) {
 		$default_atts['chartist'] = false;
-		$default_atts['chartist_aspect_ratio'] = '3:4';
-		$default_atts['chartist_low'] = '';
-		$default_atts['chartist_high'] = '';
-		$default_atts['chartist_width'] = '';
-		$default_atts['chartist_height'] = '';
-		$default_atts['chartist_chart'] = 'line';
-		$default_atts['chartist_showline'] = true;
-		$default_atts['chartist_showarea'] = false;
-		$default_atts['chartist_showpoint'] = true;
-		$default_atts['chartist_linesmooth'] = true;
-
+		foreach ( self::$shortcode_attributes as $attribute => $value ) {
+			$default_atts[ 'chartist_' . $attribute ] = $value;
+		}
 		return $default_atts;
 	}
 
@@ -212,105 +170,112 @@ class TablePress_Chartist {
 	 * @param array  $render_options The render options for the table.
 	 * @return string The generated HTML and JavaScript code for the chart.
 	 */
-	public static function output_chart( $output, $table, $render_options ) {
-
+	public static function generate_chart( $output, $table, $render_options ) {
 		if ( ! $render_options['chartist'] ) {
 			return $output;
 		}
 
-		$chart_id = sprintf("%s_%s",str_replace('-', '_', $render_options['html_id']), self::$num);
-		self::$num = self::$num + 1;
-		$json_chart_option = '';
+		$json_chart_options = array();
 
-		$option_prefix = 'chartist_';
-		if (isset($render_options['shortcode']) && 'table-chart' === $render_options['shortcode']) {
-			$option_prefix = '';
-		}
-
-		switch (strtolower($render_options[$option_prefix . 'chart'])) {
+		// Determine/sanitize the chart type and add JS calculation functions.
+		switch ( strtolower( $render_options[ 'chartist_chart' ] ) ) {
 			case 'bar':
 				$chart = 'Bar';
 				break;
 			case 'pie':
 				$chart = 'Pie';
-				$json_chart_option = "labelInterpolationFnc: function(value) {return value[0]}";
+				$json_chart_options[] = 'labelInterpolationFnc: function( value ) { return value[0]; }';
 				break;
 			case 'percent':
 				$chart = 'Pie';
-				$json_chart_option = "labelInterpolationFnc: function(value) { return Math.round(value / data_{$chart_id}.series.reduce(sum_{$chart_id}) * 100) + '%'; }";
+				$json_chart_options[] = "labelInterpolationFnc: function( value ) { return Math.round( value / data.series.reduce( sum ) * 100 ) + '%'; }";
 				break;
+			case 'line':
 			default:
 				$chart = 'Line';
 				break;
 		}
 
-		//convert table values to numeric
+		// Convert all numeric table cell values to numeric variables, so that they show up as numbers in the JSON encoded string, as ChartistJS requires that.
 		foreach ( $table['data'] as $row_idx => $row ) {
-		  foreach ( $row as $col_idx => $cell ) {
-		    if ( is_numeric( $cell ) ) {
-		      if ( $cell == (int) $cell ) {
-		        $table['data'][ $row_idx ][ $col_idx ] = (int) $cell;
-		      } else {
-		        $table['data'][ $row_idx ][ $col_idx ] = (float) $cell;
-		      }
-		    }
-		  }
+			foreach ( $row as $col_idx => $cell ) {
+				$table['data'][ $row_idx ][ $col_idx ] = self::_maybe_string_to_number( $cell );
+			}
 		}
 
-
-
+		// Get labels from the first table row.
 		if ( $render_options['table_head'] ) {
-			$head_row = array_shift( $table['data'] );
-			$json_labels = json_encode( $head_row );
-			$json_data = json_encode( ('Pie' !== $chart) ? $table['data'] : array_shift( $table['data'] )); // if 'Pie' only use the first row
-			if ('percent' === strtolower($render_options[$option_prefix . 'chart'])) {
-				$json_chart_template = "series: %s";
-				$json_chart_data = sprintf( $json_chart_template,  $json_data );
-			} else {
-				$json_chart_template = "labels: %s, series: %s";
-				$json_chart_data = sprintf( $json_chart_template, $json_labels, $json_data );
-			}
-		} else {
-			$json_data = json_encode( ('Pie' !== $chart) ? $table['data'] : array_shift( $table['data'] )); // if 'Pie' only use the first row
-			$json_chart_template = "series: %s";
-			$json_chart_data = sprintf( $json_chart_template, $json_data );
+			$json_labels = array_shift( $table['data'] );
 		}
 
-		if ('' === $json_chart_option) {
-			foreach ( self::$option_atts as $option ) {
-				$key = $option_prefix . strtolower( $option );
-				if ( isset( $render_options[ $key ] ) ) {
-					$json_chart_option .= sprintf(
-						'%s %s: %s',
-						( '' !== $json_chart_option ) ? ',' : '',
-						$option,
-						var_export( $render_options[ $key ], true )
-					);
-				}
+		// Use only the first row in Pie charts.
+		if ( 'Pie' === $chart ) {
+			$table['data'] = array_shift( $table['data'] );
+		}
+
+		// Create JSON object for the chart data.
+		$json_chart_data = array(
+			'series' => $table['data'],
+		);
+		if ( $render_options['table_head'] && 'percent' !== $render_options[ 'chartist_chart' ] ) {
+			$json_chart_data['labels'] = $json_labels;
+		}
+		$json_chart_data = json_encode( (object) $json_chart_data );
+
+		// Add other chart options.
+		foreach ( self::$attribute_to_js_mapping as $option_key => $option_js ) {
+			$option_key = 'chartist_' . $option_key;
+			if ( isset( $render_options[ $option_key ] ) ) {
+				$value = self::_maybe_string_to_number( $render_options[ $option_key ] );
+				$json_chart_options[] = $option_js . ': ' .	json_encode( $value );
 			}
 		}
+		$json_chart_options = '{ ' . implode( ', ', $json_chart_options ) . ' }';
+
+		// Sanitize the aspect ratio.
+		$aspect_ratio = 'ct-perfect-fourth';
+		if ( isset( self::$aspect_ratios[ $render_options[ 'chartist_aspect_ratio'] ] ) ) {
+			$aspect_ratio = self::$aspect_ratios[ $render_options[ 'chartist_aspect_ratio'] ];
+		}
+
 		$chartist_script = <<<JS
 <script type="text/javascript">
 jQuery(document).ready(function(){
-	var data_{$chart_id} = {
-		{$json_chart_data}
-	};
-	var options_{$chart_id} = {
-		{$json_chart_option}
-	}
-	var sum_{$chart_id} = function(a, b) { return a + b };
-	new Chartist.{$chart}('#chartist_{$chart_id}', data_{$chart_id}, options_{$chart_id});
+	var	data = {$json_chart_data},
+		options = {$json_chart_options},
+		sum = function( a, b ) { return a + b; };
+	new Chartist.{$chart}( '#chartist-{$render_options['html_id']}', data, options );
 });
 </script>
 JS;
 
 		$chartist_divtag = sprintf(
-			'<div id="%s" class="ct-chart %s"></div>',
-			"chartist_{$chart_id}",
-			( array_key_exists( $render_options[$option_prefix . 'aspect_ratio'], self::$aspect_ratios ) ) ? self::$aspect_ratios[ $render_options[$option_prefix . 'aspect_ratio'] ]: 'ct-perfect-fourth'
+			"<div id=\"%s\" class=\"ct-chart %s\"></div>\n",
+			"chartist-{$render_options['html_id']}",
+			$aspect_ratio
 		);
 
 		return $chartist_divtag . $chartist_script;
 	}
 
-}
+	/**
+	 * Convert a string to int or float, if it's a numeric string.
+	 *
+	 * @since 0.7
+	 *
+	 * @param string $string String that shall be converted to a number.
+	 * @return mixed Possibly converted string.
+	 */
+	protected static function _maybe_string_to_number( $string ) {
+		if ( ! is_numeric( $string ) ) {
+			return $string;
+		}
+
+		if ( $string == (int) $string ) { // Don't do explicit === check here!
+			return (int) $string;
+		} else {
+			return (float) $string;
+		}
+	}
+
+} // class TablePress_Chartist
