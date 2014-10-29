@@ -6,6 +6,7 @@ Description: Extension for TablePress to create a responsive chart based on the 
 Version: 0.6
 Author: Per Soderlind
 Author URI: http://soderlind.no/
+License: GPL
 */
 
 // Prohibit direct script loading.
@@ -261,7 +262,7 @@ JS;
 	/**
 	 * Convert a string to int or float, if it's a numeric string.
 	 *
-	 * @since 0.7
+	 * @since 0.6
 	 *
 	 * @param string $string String that shall be converted to a number.
 	 * @return mixed Possibly converted string.
