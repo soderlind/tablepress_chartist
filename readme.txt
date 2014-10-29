@@ -4,18 +4,18 @@ Donate link: http://soderlind.no/donate/
 Tags: tablepress, table, chart, responsive
 Requires at least: 3.9
 Tested up to: 4.0
-Stable tag: 0.5.1
+Stable tag: 0.6
 License: GPLv2 or later
 
 Create a responsive chart based on the data in a TablePress table.
 
 == Description ==
 
-Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this [TablePress](https://wordpress.org/plugins/tablepress/) extension creates a responsive chart based on the data in a TablePress table.
+Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this [TablePress](https://wordpress.org/plugins/tablepress/) Extension creates a responsive chart based on the data in a TablePress table.
 
 = Use =
 
-Add the `chartist=true` parameter to your TablePress shortcode, e.g.: `[table id=1 chartist=true /]`.
+Add the Shortcode `[table-chart id=123 /]` to a post or page to create a chart from the TablePress table 123.
 
 Optional parameters:
 
@@ -26,9 +26,10 @@ Optional parameters:
 * Enable/disable smooth line: `linesmooth=true` (default: true)
 * Enable/disable line points: `showpoint=true` (default: true)
 * Set chart aspect ratio: `aspect_ratio=3:4` (default: 3:4) Alternatives: 1, 15:16, 8:9, 5:6, 4:5, 3:4, 2:3, 5:8, 1:1.618, 3:5, 9:16, 8:15, 1:2, 2:5, 3:8, 1:3, or 1:4
-* Select chart type: `chart=bar`(default: line) Alternatives: line, bar, pie or percent. Pie or percent will only use the first datarow. Percent will ignore the header row.
+* Select chart type: `chart=bar` (default: line) Alternatives: line, bar, pie, or percent.
 
-If the "Table Head Row" option is set for the table, the Extension will use the head row data for the chart labels.
+If the "Table Head Row" option is enabled for the table, the Extension will use the head row data for the chart labels.
+The other rows will be shown as lines or bars. Pie or percent charts will only use the first data row. Percent charts will ignore the header row.
 
 = CSS customizations =
 
@@ -68,27 +69,29 @@ Prerequisite (install first): The [TablePress](https://wordpress.org/plugins/tab
 
 == Screenshots ==
 
-1. `[table id=1 chartist=true /]`
-2. `[table id=1 chartist=true showarea=true /]`
-3. `[table id=1 chartist=true showarea=true linesmooth=false /]`
-4. `[table id=1 chartist=true linesmooth=false showpoint=false /]`
-5. `[table id=1 chartist=true showarea=true showline=false showpoint=false /]`
-6. `[table id=1 chartist=true low=0 high=8 /]`
-7. `[table id=1 chartist=true chart=bar /]`
-8. `[table id=1 chartist=true chart=pie /]`
-9. `[table id=1 chartist=true chart=percent /]`
+1. `[table-chart id=1 /]`
+2. `[table-chart id=1 showarea=true /]`
+3. `[table-chart id=1 showarea=true linesmooth=false /]`
+4. `[table-chart id=1 linesmooth=false showpoint=false /]`
+5. `[table-chart id=1 showarea=true showline=false showpoint=false /]`
+6. `[table-chart id=1 low=0 high=8 /]`
+7. `[table-chart id=1 chart=bar /]`
+8. `[table-chart id=1 chart=pie /]`
+9. `[table-chart id=1 chart=percent /]`
 
 == Changelog ==
+= 0.6 =
+Switch to `[table-chart]` Shortcode.
 = 0.5.1 =
-* Revert to PHP json_encode
+* Revert to PHP json_encode().
 = 0.5 =
-* **Breaking change**: Simplified optional parameters (removed prefix `chartist_`), new optional parameters are: showline, showarea, low, high, linesmooth, showpoint and aspect_ratio. See examples in [screenshots](https://wordpress.org/plugins/tablepress-chartist/screenshots/)
-* Added support for `chart=pie` and `chart=percent` 
+* **Breaking change**: Simplified optional parameters (removed prefix `chartist_`), new optional parameters are: showline, showarea, low, high, linesmooth, showpoint and aspect_ratio. See examples in [screenshots](https://wordpress.org/plugins/tablepress-chartist/screenshots/).
+* Added support for `chart=pie` and `chart=percent`.
 = 0.4 =
-* Added support for bar chart: `chartist_chart=bar`
+* Added support for bar chart: `chartist_chart=bar`.
 = 0.3 =
-* 0.3 Added support for CSS customizations
+* 0.3 Added support for CSS customizations.
 = 0.2 =
-* Added more optional parameters
+* Added more optional parameters.
 = 0.1 =
 * Initial release
