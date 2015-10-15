@@ -187,6 +187,11 @@ class TablePress_Chartist {
 				$chart = 'Pie';
 				$json_chart_options[] = 'labelInterpolationFnc: function( value ) { return value[0]; }';
 				break;
+			case 'donut':
+				$chart = 'Pie';
+				$json_chart_options[] = 'labelInterpolationFnc: function( value ) { return value[0]; }';
+				$json_chart_options[] = 'donut: true';
+				break;
 			case 'percent':
 				$chart = 'Pie';
 				$json_chart_options[] = "labelInterpolationFnc: function( value ) { return Math.round( value / data.series.reduce( sum ) * 100 ) + '%'; }";
