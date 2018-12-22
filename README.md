@@ -1,12 +1,12 @@
-#TablePress Extension: Chartist
+# TablePress Extension: Chartist
 
 ![Sample chart](wp-assets/screenshot-1.jpg)
 
-##About
+## About
 
 Using [Chartist.js](http://gionkunz.github.io/chartist-js/), this [TablePress](https://tablepress.org/) Extension creates a responsive chart based on the data in a TablePress table.
 
-##Usage
+## Usage
 
 Add the Shortcode `[table-chart id=123 /]` to a post or page to create a chart from the TablePress table 123.
 
@@ -23,7 +23,7 @@ Add the Shortcode `[table-chart id=123 /]` to a post or page to create a chart f
 If the "Table Head Row" option is enabled for the table, the Extension will use the head row data for the chart labels.
 The other rows will be shown as lines or bars. Pie or percent charts will only use the first data row. Percent charts will ignore the header row.
 
-##CSS customizations
+## CSS customizations
 
 If you'd like to overide [the default style](http://gionkunz.github.io/chartist-js/getting-started.html#the-sass-way), you can add a `tablepress-chartist-custom.css` in `wp-content` directory. It will be loaded after the Extension's default CSS file `libdist/chartist.min.css`.
 
@@ -51,7 +51,7 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 }
 ```
 
-##Installation
+## Installation
 
 **Prerequisite:** The [TablePress](https://tablepress.org/) plugin
 
@@ -59,7 +59,7 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 1. Click `Install Now`
 1. When the plugin is installed, activate it.
 
-##Changelog
+## Changelog
 * 0.6 Switch to `[table-chart]` Shortcode.
 * 0.5.1 Revert to PHP json_encode().
 * 0.5 **Breaking change**: Simplified optional parameters (removed prefix `chartist_`), new optional parameters are: showline, showarea, low, high, linesmooth, showpoint and aspect_ratio. See examples in [screenshots](https://wordpress.org/plugins/tablepress-chartist/screenshots/). Added support for `chart=pie` and `chart=percent`.
@@ -68,12 +68,12 @@ If you'd like to overide [the default style](http://gionkunz.github.io/chartist-
 * 0.2 Added more optional parameters.
 * 0.1 Initial release (i.e. an early beta).
 
-##Credits
+## Credits
 
 * Gion Kunz for creating [Chartist.js](http://gionkunz.github.io/chartist-js/)
 * Tobias Bäthge for creating [TablePress](https://tablepress.org/)
 
-##Copyright and License
+## Copyright and License
 
 TablePress Extension: Chartist is copyright 2014 Per Soderlind
 
